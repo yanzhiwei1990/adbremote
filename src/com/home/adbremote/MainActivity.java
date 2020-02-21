@@ -98,6 +98,17 @@ public class MainActivity extends Activity {
 				} else {
 					isConnect = false;
 				}
+				Button_connect.setText(isConnect ? "已连接" : "连接");
+				if (isConnect) {
+					Button_ring.setEnabled(true);
+				} else {
+					Button_ring.setEnabled(false);
+			    	Button_manual_answer.setEnabled(false);
+			    	Button_auto_answer.setEnabled(false);
+			    	Button_current.setEnabled(false);
+			    	Button_restart.setEnabled(false);
+			    	TextView_status.setText("");
+				}
 				onlinejudgetimecount++;
 				/*if (onlinetimeoutrecord < 0) {
 					onlinetimeoutrecord = onlinetimecount;
@@ -189,10 +200,19 @@ public class MainActivity extends Activity {
             		adbconnected = true;
             		Button_ring.setText("adb已连接");
             		sendToHandle(ADBCOMMAND, "adb connect homedevice.iask.in:39634", 0);
+
+			    	Button_manual_answer.setEnabled(true);
+			    	Button_auto_answer.setEnabled(true);
+			    	Button_current.setEnabled(true);
+			    	Button_restart.setEnabled(true);
             	} else {
             		adbconnected = false;
             		Button_ring.setText("连接adb");
             		sendToHandle(ADBCOMMAND, "adb disconnect", 0);
+            		Button_manual_answer.setEnabled(false);
+			    	Button_auto_answer.setEnabled(false);
+			    	Button_current.setEnabled(false);
+			    	Button_restart.setEnabled(false);
             	}
             	/*for (int i = 0; i < 2; i++) {
             		period = period + 500;
@@ -273,6 +293,11 @@ public class MainActivity extends Activity {
             	sendToHandle(ADBCOMMAND, "adb reboot", 0);
             }
         });
+    	Button_ring.setEnabled(false);
+    	Button_manual_answer.setEnabled(false);
+    	Button_auto_answer.setEnabled(false);
+    	Button_current.setEnabled(false);
+    	Button_restart.setEnabled(false);
     }
     
     private void sendToHandle(int type, String mess, int delay) {
@@ -441,12 +466,26 @@ public class MainActivity extends Activity {
       protected void onResume(){ 
         super.onResume();
         acquireWakeLock();
+        Button_ring.setEnabled(false);
+    	Button_manual_answer.setEnabled(false);
+    	Button_auto_answer.setEnabled(false);
+    	Button_current.setEnabled(false);
+    	Button_restart.setEnabled(false);
         //mHandler.sendEmptyMessage(START_SOCKET);
         Log.i(TAG, "onResume"); 
       } 
       protected void onPause(){ 
         super.onPause();
         releaseWakeLock();
+        if (isConnect) {
+    		if (adbconnected) {
+        		Button_ring.setText("连接adb");
+        		TextView_status.setText("");
+        		sendToHandle(ADBCOMMAND, "adb disconnect", 0);
+        		adbconnected = false;
+        	}
+    		mHandler.sendEmptyMessageDelayed(CLOSE_SOCKET, 200);
+        }
         Log.i(TAG, "onPause"); 
         if(isFinishing()){ 
           Log.w(TAG, "will be destroyed!"); 

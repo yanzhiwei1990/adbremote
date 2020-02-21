@@ -12,8 +12,8 @@ public class BootCompeleteReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
 		if(intent.getAction().equals(ACTION_BOOT_COMPLETED)){
-			Intent serIntent = new Intent(context, ActionService.class);
-			serIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			//Intent serIntent = new Intent(context, ActionService.class);
+			//serIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			//context.startService(serIntent);
 		    Log.d(TAG, "start ActionService after boot!");
 		}

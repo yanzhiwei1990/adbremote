@@ -27,7 +27,7 @@
             android:id="@+id/editText_ip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="temptry.top"
+            android:text="opendiylib.com"
             android:width="200dp" />
     </LinearLayout>
 
